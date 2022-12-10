@@ -29,20 +29,33 @@ router.put('/1', (req, res) => {
         const data = fs.readFileSync(dataPath, "utf8");
         let databases = JSON.parse(data)
         let datas = databases.find(user => user.userId === 1)
+        let filterDatas =[]
+        let checkfilter=false
         let check = false;
         datas.products.map((cart) => {
             if (cart.productId === req.body.productId) {
-                cart.quantity = cart.quantity + 1;
+                if((cart.quantity + req.body.amount)>0){
+                    cart.quantity = cart.quantity + req.body.amount;
+                }else{
+                filterDatas = datas.products.filter((carts) => carts.productId != req.body.productId)
+                checkfilter=true;
+                }
                 check = true;
-            }
+            } 
         })
         if (!check) {
+            delete  req.body.amount
             req.body.quantity = 1;
             datas.products.push(req.body)
         }
+
         databases.map((user) => {
             if (user.userId === 1) {
-                user.products = datas.products
+                if(!checkfilter){
+                    user.products = datas.products
+                }else{
+                    user.products = filterDatas
+                }
             }
         })
         fs.writeFile(dataPath, JSON.stringify(databases, null, 2), (error) => {
