@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
   }
 })
 
-router.post('/cartProducts', (req, res) => {
+router.get('/cartProducts', (req, res) => {
   try {
     const dataCart = fs.readFileSync(dataPathCart, "utf8");
     let databasesCart = JSON.parse(dataCart)

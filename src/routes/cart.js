@@ -66,7 +66,7 @@ router.put('/1', (req, res) => {
         let cart = databases.find(user => user.userId === 1);
         const dataProduct = fs.readFileSync(dataPathProduct, "utf8");
         let databasesProduct = JSON.parse(dataProduct)
-        res.status(200).json(filter.filterByCart(databasesProduct, cart.products));
+        res.status(200).json({ cart: filter.filterByProducts(databasesProduct, cart.products), products: filter.filterByCart(databasesProduct, cart.products)});
     } catch (err) {
         console.log(`Error reading file from disk: ${err}`)
     }
@@ -168,7 +168,10 @@ router.put('/removeCheckOutFromCart/1', (req, res) => {
                 return;
             }
         });
-        res.status(200).json(databases.find(user => user.userId === 1));
+        let cart =databases.find(user => user.userId === 1)
+        const dataProduct = fs.readFileSync(dataPathProduct, "utf8");
+        let databasesProduct = JSON.parse(dataProduct)
+        res.status(200).json(filter.filterByProducts(databasesProduct, cart.products));
     } catch (err) {
         console.log(`Error reading file from disk: ${err}`)
     }
