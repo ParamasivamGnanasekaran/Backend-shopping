@@ -171,7 +171,8 @@ router.put('/removeCheckOutFromCart/1', (req, res) => {
         let cart =databases.find(user => user.userId === 1)
         const dataProduct = fs.readFileSync(dataPathProduct, "utf8");
         let databasesProduct = JSON.parse(dataProduct)
-        res.status(200).json(filter.filterByProducts(databasesProduct, cart.products));
+        let filterProducts = filter.filterByProducts(databasesProduct, cart.products)
+        res.status(200).json(filter.filterByCart(filterProducts, cart.products));
     } catch (err) {
         console.log(`Error reading file from disk: ${err}`)
     }
